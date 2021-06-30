@@ -1,0 +1,2 @@
+rootProject.name = "IceMusic"
+include ':app'
