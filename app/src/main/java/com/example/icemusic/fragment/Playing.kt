@@ -93,47 +93,43 @@ class Playing : Fragment() {
             }
         })
         binding.btnFavorite.setOnClickListener {
-            val favoriteMusic = iceMusic?.let {
-                if (iceMusic?.uri != null) MusicFavorite(
-                    0,
-                    it.id,
-                    it.name,
-                    it.artists_names,
-                    "",
-                    it.duration,
-                    iceMusic!!.uri.toString()
-                )
-                else MusicFavorite(
-                    0,
-                    it.id,
-                    it.name,
-                    it.artists_names,
-                    it.thumbnail,
-                    it.duration,
-                    null
-                )
-            }
-            when (listMusicFavorite.size) {
-                0 -> {
-                    favoriteMusic?.let {
-                        musicFavoriteMusicViewModel.insertMusicFavorite(it)
-                    }
+            iceMusic?.let {
+                if (iceMusic?.uri != null) {
+                    Toast.makeText(requireContext(), "This song was been download", Toast.LENGTH_SHORT).show()
                 }
-                else -> {
-                    var isFavorite = false
-                    for (music in listMusicFavorite) {
-                        if (music.name == iceMusic?.name) {
-                            isFavorite = true
-                            musicFavoriteMusicViewModel.deleteMusicFavorite(music)
-                            break
+                else {
+                    val favoriteMusic =  MusicFavorite(
+                        0,
+                        it.id,
+                        it.name,
+                        it.artists_names,
+                        it.thumbnail,
+                        it.duration,
+                        null
+                    )
+                    when (listMusicFavorite.size) {
+                        0 -> {
+                            favoriteMusic.let {
+                                musicFavoriteMusicViewModel.insertMusicFavorite(it)
+                            }
+                        }
+                        else -> {
+                            var isFavorite = false
+                            for (music in listMusicFavorite) {
+                                if (music.name == iceMusic?.name) {
+                                    isFavorite = true
+                                    musicFavoriteMusicViewModel.deleteMusicFavorite(music)
+                                    break
+                                }
+                            }
+                            if (!isFavorite) {
+                                favoriteMusic.let { musicFavoriteMusicViewModel.insertMusicFavorite(it) }
+                            }
                         }
                     }
-                    if (!isFavorite) {
-                        favoriteMusic?.let { musicFavoriteMusicViewModel.insertMusicFavorite(it) }
-                    }
+                    musicFavoriteMusicViewModel.getFavoriteMusic()
                 }
             }
-            musicFavoriteMusicViewModel.getFavoriteMusic()
         }
         binding.btnDownload.setOnClickListener {
             checkPermission()
@@ -167,7 +163,8 @@ class Playing : Fragment() {
                         it.uri!!
                     )
                 )
-                else Picasso.get().load(it.thumbnail).into(binding.imgThumbnails)
+                else Picasso.get().load(it.thumbnail.replace("w94", "w320"))
+                    .into(binding.imgThumbnails)
                 binding.tvNameMusic.text = it.name
                 binding.tvArtistsMusic.text = it.artists_names
                 musicFavoriteMusicViewModel.getFavoriteMusic()

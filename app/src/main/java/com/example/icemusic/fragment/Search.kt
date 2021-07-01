@@ -114,7 +114,9 @@ class Search : Fragment(), CommunicationAdapterMusic {
                     if (searchPattern != "") {
                         viewModelApi.searchMusic(searchPattern)
                     } else {
-                        binding.progress.visibility = View.GONE
+                       withContext(Dispatchers.Main){
+                           binding.progress.visibility = View.GONE
+                       }
                     }
                 } else {
                     withContext(Dispatchers.Main) {

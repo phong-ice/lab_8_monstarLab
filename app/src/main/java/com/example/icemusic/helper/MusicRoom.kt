@@ -8,7 +8,7 @@ import com.example.icemusic.dao.MusicFavoriteDao
 import com.example.icemusic.model.IceMusic
 import com.example.icemusic.model.MusicFavorite
 
-@Database(entities = [MusicFavorite::class], version = 5, exportSchema = false)
+@Database(entities = [MusicFavorite::class], version = 6, exportSchema = false)
 abstract class MusicRoom : RoomDatabase() {
 
     abstract val favoriteDao:MusicFavoriteDao
